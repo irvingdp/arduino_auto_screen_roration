@@ -8,7 +8,7 @@ This is a Flask-based web application for automatic screen rotation control. It 
 
 ## Hardware Setup
 
-![Hardware Setup](setup.jpg){width=15%}
+![Hardware Setup](setup.jpg)
 
 ## Features
 
