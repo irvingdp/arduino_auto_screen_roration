@@ -1,81 +1,81 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>螢幕自動旋轉控制器</title>
+    <title>Screen Auto-Rotation Controller</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>螢幕自動旋轉控制器</h1>
+            <h1>Screen Auto-Rotation Controller</h1>
         </header>
 
         <main>
             <div class="control-panel">
                 <div class="form-group">
-                    <label for="port-select">選擇 Arduino 序列埠:</label>
+                    <label for="port-select">Select Arduino Serial Port:</label>
                     <div class="select-container">
                         <select id="port-select" class="form-control">
-                            <option value="">-- 請選擇序列埠 --</option>
+                            <option value="">-- Please select a serial port --</option>
                         </select>
                         <button id="refresh-ports" class="btn btn-secondary">
-                            <i class="fas fa-sync-alt"></i> 重新整理
+                            <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="display-select">選擇要旋轉的顯示器:</label>
+                    <label for="display-select">Select Display to Rotate:</label>
                     <div class="select-container">
                         <select id="display-select" class="form-control">
-                            <option value="">-- 請選擇顯示器 --</option>
+                            <option value="">-- Please select a display --</option>
                         </select>
                         <button id="refresh-displays" class="btn btn-secondary">
-                            <i class="fas fa-sync-alt"></i> 重新整理
+                            <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                         <button id="debug-displays" class="btn btn-secondary">
-                            <i class="fas fa-bug"></i> 除錯顯示器
+                            <i class="fas fa-bug"></i> Debug Displays
                         </button>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <button id="toggle-monitoring" class="btn btn-primary">
-                        <i class="fas fa-play"></i> 開始監聽
+                        <i class="fas fa-play"></i> Start Monitoring
                     </button>
                 </div>
             </div>
 
             <div class="status-panel">
-                <h2>狀態</h2>
+                <h2>Status</h2>
                 <div class="status-item">
-                    <span class="status-label">連線狀態:</span>
-                    <span id="connection-status" class="status-value">未連線</span>
+                    <span class="status-label">Connection Status:</span>
+                    <span id="connection-status" class="status-value">Disconnected</span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">收到角度:</span>
+                    <span class="status-label">Received Angle:</span>
                     <span id="received-data" class="status-value">-</span>
                 </div>
                 <div class="status-item">
-                    <span class="status-label">上次操作:</span>
+                    <span class="status-label">Last Action:</span>
                     <span id="action-status" class="status-value">-</span>
                 </div>
             </div>
 
             <div class="debug-panel">
                 <div class="debug-header">
-                    <h2>除錯日誌</h2>
+                    <h2>Debug Log</h2>
                     <div class="debug-controls">
                         <label class="switch">
                             <input type="checkbox" id="debug-toggle">
                             <span class="slider round"></span>
                         </label>
-                        <span class="debug-label">除錯模式</span>
+                        <span class="debug-label">Debug Mode</span>
                         <button id="clear-log" class="btn btn-sm btn-secondary">
-                            <i class="fas fa-trash"></i> 清除日誌
+                            <i class="fas fa-trash"></i> Clear Log
                         </button>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2023 螢幕自動旋轉控制器</p>
+            <p>&copy; 2023 Screen Auto-Rotation Controller</p>
         </footer>
     </div>
 

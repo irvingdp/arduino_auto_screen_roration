@@ -12,16 +12,17 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'screen_rotator_secret_key'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# 全局變數
+# Global variables
 serial_connection = None
 serial_thread = None
 is_running = False
 last_processed_degree = None
 available_ports = {}
 available_displays = {}
+first_origin_values = {}  # Store the first Origin value for each display
 
 def get_serial_ports():
-    """獲取可用的序列埠列表"""
+    """Get list of available serial ports"""
     ports = serial.tools.list_ports.comports()
     port_list = []
     for p in ports:
@@ -33,124 +34,131 @@ def get_serial_ports():
     return port_list
 
 def get_displays():
-    """使用 displayplacer 獲取顯示器列表"""
+    """Use displayplacer to get display list"""
+    global first_origin_values
     try:
-        print("正在執行 displayplacer list 命令...")
+        print("Executing displayplacer list command...")
         result = subprocess.run(['displayplacer', 'list'], capture_output=True, text=True, check=True)
         output = result.stdout
-        print(f"displayplacer 輸出:\n{output}")
+        print(f"displayplacer output:\n{output}")
         
         displays = []
         current_display = {}
         
         for line in output.splitlines():
             line = line.strip()
-            print(f"處理行: {line}")
+            print(f"Processing line: {line}")
             
-            # 解析顯示器ID
+            # Parse display ID
             if "Persistent screen id:" in line:
                 current_display["id"] = line.split(":")[-1].strip()
-                print(f"找到 Screen ID: {current_display['id']}")
+                print(f"Found Screen ID: {current_display['id']}")
             
-            # 解析顯示器類型
+            # Parse display type
             elif "Type:" in line:
                 current_display["type"] = line.split(":")[-1].strip()
-                print(f"找到 Type: {current_display['type']}")
+                print(f"Found Type: {current_display['type']}")
             
-            # 解析解析度
+            # Parse resolution
             elif "Resolution:" in line:
                 current_display["res"] = line.split(":")[-1].strip()
-                print(f"找到 Resolution: {current_display['res']}")
+                print(f"Found Resolution: {current_display['res']}")
 
-            # 解析Hertz
+            # Parse Hertz
             elif "Hertz:" in line:
                 current_display["hz"] = line.split(":")[-1].strip()
-                print(f"找到 Hertz: {current_display['hz']}")   
+                print(f"Found Hertz: {current_display['hz']}")   
 
             # Color Depth
             elif "Color Depth:" in line:
                 current_display["color_depth"] = line.split(":")[-1].strip()
-                print(f"找到 Hertz: {current_display['color_depth']}")   
+                print(f"Found Color Depth: {current_display['color_depth']}")   
 
             elif "Scaling:" in line:
                 current_display["scaling"] = line.split(":")[-1].strip()
-                print(f"找到 Scaling: {current_display['scaling']}") 
+                print(f"Found Scaling: {current_display['scaling']}") 
 
             elif "Origin:" in line:
-                current_display["origin"] = parse_origin(line)
-                print(f"找到 Origin: {current_display['origin']}") 
-
+                if "id" in current_display and current_display["id"] not in first_origin_values:
+                    # First time finding Origin for this display, store it
+                    first_origin_values[current_display["id"]] = parse_origin(line)
+                    current_display["origin"] = first_origin_values[current_display["id"]]
+                    print(f"Found and stored Origin: {current_display['origin']}")
+                elif "id" in current_display and current_display["id"] in first_origin_values:
+                    # Use previously stored Origin value
+                    current_display["origin"] = first_origin_values[current_display["id"]]
+                    print(f"Using stored Origin: {current_display['origin']}")
 
             elif "Rotation:" in line:
                 current_display["degree"] = parse_rotation(line)
-                print(f"找到 Rotation: {current_display['degree']}")
+                print(f"Found Rotation: {current_display['degree']}")
 
             elif "Enabled:" in line:
                 current_display["enabled"] = line.split(":")[-1].strip()
-                print(f"找到 Enabled: {current_display['enabled']}") 
+                print(f"Found Enabled: {current_display['enabled']}") 
             
-            # 當我們收集到足夠的信息時，創建顯示器描述並添加到列表
+            # When we have collected enough information, create display description and add to list
             if all(key in current_display for key in ["id", "type", "res", "hz", "color_depth", "scaling", "origin", "degree", "enabled"]):
                 current_display["desc"] = f'{current_display["type"]} ({current_display["res"]}) - ID: {current_display["id"]}'
-                print(f"完成顯示器描述: {current_display['desc']}")
+                print(f"Completed display description: {current_display['desc']}")
                 displays.append(current_display.copy())
-                current_display = {}  # 重置當前顯示器信息
+                current_display = {}  # Reset current display information
         
-        print(f"找到 {len(displays)} 個顯示器")
+        print(f"Found {len(displays)} displays")
         return displays
     except FileNotFoundError:
-        print("錯誤: 找不到 'displayplacer' 命令")
+        print("Error: 'displayplacer' command not found")
         return []
     except subprocess.CalledProcessError as e:
-        print(f"執行 displayplacer 失敗: {e.stderr}")
+        print(f"Failed to execute displayplacer: {e.stderr}")
         return []
     except Exception as e:
-        print(f"解析顯示器信息時發生錯誤: {str(e)}")
+        print(f"Error parsing display information: {str(e)}")
         return []
 
 def parse_rotation(rotation_str):
-    """解析 Rotation 字符串，提取角度值"""
+    """Parse Rotation string, extract angle value"""
     if not rotation_str:
         return None
     
-    # 嘗試提取數字部分
+    # Try to extract the numeric part
     import re
     match = re.search(r'Rotation:\s*(\d+)', rotation_str)
     if match:
-        return match.group(1)  # 返回數字部分
+        return match.group(1)  # Return the numeric part
     
-    return rotation_str  # 如果沒有找到匹配，返回原始字符串
+    return rotation_str  # If no match found, return the original string
 
 def parse_origin(origin_str):
-    """解析 Origin 字符串，提取坐標部分"""
+    """Parse Origin string, extract coordinate part"""
     if not origin_str:
         return None
     
-    # 嘗試提取括號中的坐標
+    # Try to extract coordinates in parentheses
     import re
     match = re.search(r'\(([^)]+)\)', origin_str)
     if match:
-        return match.group(0)  # 返回完整的 (x,y) 格式
+        return match.group(0)  # Return the complete (x,y) format
     
     return origin_str
 
 def rotate_display(displays, display_id_to_control, degree):
-    """執行 displayplacer 命令來旋轉所有螢幕，同時保持其他顯示器設置"""
+    """Execute displayplacer command to rotate all screens while maintaining other display settings"""
     try:
         success = True
-          # 構建完整的 displayplacer 命令
+          # Build the complete displayplacer command
         command = 'displayplacer '
         for display in displays:
-            # 添加顯示器 ID
+            # Add display ID
             command += f'"id:{display["id"]} '
 
-            # 添加旋轉角度
+            # Add rotation angle
             if display_id_to_control == display["id"]:
                 command += f'degree:{degree} '
             else:
                 command += f'degree:{display["degree"]} '
             
-            # 添加其他參數（如果提供）
+            # Add other parameters (if provided)
             if "res" in display:
                 command += f'res:{display["res"]} '
             if "hz" in display:
@@ -164,35 +172,35 @@ def rotate_display(displays, display_id_to_control, degree):
             if "origin" in display:
                 command += f'origin:{display["origin"]}" '
             
-        socketio.emit('action', {'status': f"執行中: 旋轉顯示器 {display['id']} 到 {degree}°"})
+        socketio.emit('action', {'status': f"Executing: Rotating display {display['id']} to {degree}°"})
         
-        # 執行命令 - 使用 shell=True 來處理完整命令字符串
+        # Execute command - use shell=True to handle the complete command string
         try:
             result = subprocess.run(command, shell=True, capture_output=True, text=True, check=True, timeout=5)
-            socketio.emit('action', {'status': f"成功: 顯示器 {display['id']} 已設為 {degree}°"})
+            socketio.emit('action', {'status': f"Success: Display {display['id']} set to {degree}°"})
         except Exception as e:
-            error_message = f"旋轉顯示器 {display['id']} 時發生錯誤: {str(e)}"
-            socketio.emit('error', {'message': error_message})
+            error_message = f"Error rotating display {display['id']}: {str(e)}"
+            socketio.emit('action', {'message': error_message})
             success = False
         
         return success
         
     except Exception as e:
-        error_message = f"旋轉顯示器時發生錯誤: {str(e)}"
-        socketio.emit('error', {'message': error_message})
+        error_message = f"Error rotating display: {str(e)}"
+        socketio.emit('action', {'message': error_message})
         return False
 
 def serial_monitor_thread(port, display_id_to_control):
-    """在背景線程中讀取序列埠並處理數據"""
+    """Read serial port and process data in background thread"""
     global serial_connection, is_running, last_processed_degree
     
-    socketio.emit('connection', {'status': f"正在連線到 {port}...", 'color': 'orange'})
+    socketio.emit('connection', {'status': f"Connecting to {port}...", 'color': 'orange'})
     
     while is_running:
         try:
-            # 嘗試連接序列埠
+            # Try to connect to serial port
             serial_connection = serial.Serial(port, 9600, timeout=2)
-            socketio.emit('connection', {'status': f"已連線到 {port}", 'color': 'green'})
+            socketio.emit('connection', {'status': f"Connected to {port}", 'color': 'green'})
 
             while is_running:
                 if serial_connection.in_waiting > 0:
@@ -202,24 +210,24 @@ def serial_monitor_thread(port, display_id_to_control):
                         
                         if line in ["0", "90", "180", "270"]:
                             current_degree = line
-                            # 只有當角度與上次成功處理的不同時才執行旋轉
+                            # Only rotate if the angle is different from the last successfully processed one
                             if current_degree != last_processed_degree:
-                                # 獲取所有顯示器並旋轉
+                                # Get all displays and rotate
                                 try:
                                     displays = get_displays()
                                     if rotate_display(displays, display_id_to_control, current_degree):
                                         last_processed_degree = current_degree
                                 except Exception as e:
-                                    socketio.emit('error', {'message': f"獲取或旋轉顯示器時出錯: {str(e)}"})
+                                    socketio.emit('action', {'message': f"Error getting or rotating displays: {str(e)}"})
                             else:
-                                socketio.emit('action', {'status': f"角度未變化，跳過旋轉: {current_degree}°"})
+                                socketio.emit('action', {'status': f"Angle unchanged, skipping rotation: {current_degree}°"})
                         elif line:
-                            socketio.emit('action', {'status': f"收到非預期數據: {line}"})
+                            socketio.emit('error', {'status': f"Received unexpected data: {line}"})
 
                     except UnicodeDecodeError:
-                        socketio.emit('error', {'message': "無法解碼收到的數據，可能包含非 UTF-8 字元"})
+                        socketio.emit('error', {'message': "Unable to decode received data, may contain non-UTF-8 characters"})
                     except Exception as read_err:
-                        socketio.emit('error', {'message': f"讀取或處理數據時發生錯誤: {read_err}"})
+                        socketio.emit('error', {'message': f"Error reading or processing data: {read_err}"})
                         if isinstance(read_err, (serial.SerialException, OSError)):
                             raise
                         else:
@@ -228,49 +236,49 @@ def serial_monitor_thread(port, display_id_to_control):
                 else:
                     time.sleep(0.05)
 
-            # 正常退出內層循環
+            # Normal exit from inner loop
             if serial_connection.is_open:
                 serial_connection.close()
             break
 
         except serial.SerialException as e:
-            socketio.emit('connection', {'status': f"無法連線或斷線: {port}", 'color': 'red'})
+            socketio.emit('connection', {'status': f"Unable to connect or disconnected: {port}", 'color': 'red'})
             if is_running:
                 time.sleep(3)
             else:
                 break
         except Exception as thread_err:
-            socketio.emit('error', {'message': f"監聽線程發生意外錯誤: {thread_err}"})
+            socketio.emit('error', {'message': f"Unexpected error in monitoring thread: {thread_err}"})
             if is_running:
                 time.sleep(3)
             else:
                 break
 
-    # 線程結束時確保連接關閉
+    # Ensure connection is closed when thread ends
     if serial_connection and serial_connection.is_open:
         serial_connection.close()
-    socketio.emit('connection', {'status': "未連線", 'color': 'grey'})
+    socketio.emit('connection', {'status': "Disconnected", 'color': 'grey'})
 
 @app.route('/')
 def index():
-    """渲染主頁"""
+    """Render main page"""
     return render_template('index.html')
 
 @app.route('/api/ports')
 def get_ports():
-    """API 端點：獲取序列埠列表"""
+    """API endpoint: Get serial port list"""
     ports = get_serial_ports()
     return jsonify(ports)
 
 @app.route('/api/displays')
 def get_displays_api():
-    """API 端點：獲取顯示器列表"""
+    """API endpoint: Get display list"""
     displays = get_displays()
     return jsonify(displays)
 
 @app.route('/api/start', methods=['POST'])
 def start_monitoring():
-    """API 端點：開始監聽序列埠"""
+    """API endpoint: Start monitoring serial port"""
     global is_running, serial_thread, last_processed_degree
     
     data = request.json
@@ -278,29 +286,29 @@ def start_monitoring():
     display_id = data.get('display_id')
     
     if not port:
-        return jsonify({'success': False, 'message': '請選擇一個序列埠'})
+        return jsonify({'success': False, 'message': 'Please select a serial port'})
     if not display_id:
-        return jsonify({'success': False, 'message': '請選擇一個要控制的顯示器'})
+        return jsonify({'success': False, 'message': 'Please select a display to control'})
     
     if is_running:
-        return jsonify({'success': False, 'message': '監聽已在運行中'})
+        return jsonify({'success': False, 'message': 'Monitoring is already running'})
     
     is_running = True
     last_processed_degree = None
     
-    # 啟動背景線程
+    # Start background thread
     serial_thread = threading.Thread(target=serial_monitor_thread, args=(port, display_id), daemon=True)
     serial_thread.start()
     
-    return jsonify({'success': True, 'message': '監聽已啟動'})
+    return jsonify({'success': True, 'message': 'Monitoring started'})
 
 @app.route('/api/stop', methods=['POST'])
 def stop_monitoring():
-    """API 端點：停止監聽序列埠"""
+    """API endpoint: Stop monitoring serial port"""
     global is_running, serial_connection
     
     if not is_running:
-        return jsonify({'success': False, 'message': '監聽未在運行中'})
+        return jsonify({'success': False, 'message': 'Monitoring is not running'})
     
     is_running = False
     
@@ -308,13 +316,13 @@ def stop_monitoring():
         try:
             serial_connection.close()
         except Exception as e:
-            print(f"關閉序列埠時出錯: {e}")
+            print(f"Error closing serial port: {e}")
     
-    return jsonify({'success': True, 'message': '監聽已停止'})
+    return jsonify({'success': True, 'message': 'Monitoring stopped'})
 
 @app.route('/api/debug/displays')
 def debug_displays():
-    """API 端點：直接檢查 displayplacer 輸出"""
+    """API endpoint: Directly check displayplacer output"""
     try:
         result = subprocess.run(['displayplacer', 'list'], capture_output=True, text=True)
         return jsonify({

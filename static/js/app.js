@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化 Socket.IO 連接
+    // Initialize Socket.IO connection
     const socket = io();
     
-    // DOM 元素
+    // DOM elements
     const portSelect = document.getElementById('port-select');
     const displaySelect = document.getElementById('display-select');
     const refreshPortsBtn = document.getElementById('refresh-ports');
@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearLogBtn = document.getElementById('clear-log');
     const debugLog = document.getElementById('debug-log');
     
-    // 狀態變數
+    // Status variables
     let isMonitoring = false;
     let debugMode = false;
     
-    // 初始化
+    // Initialize
     fetchPorts();
     fetchDisplays();
     
-    // 事件監聽器
+    // Event listeners
     refreshPortsBtn.addEventListener('click', fetchPorts);
     refreshDisplaysBtn.addEventListener('click', fetchDisplays);
     debugDisplaysBtn.addEventListener('click', debugDisplays);
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     debugToggle.addEventListener('change', toggleDebugMode);
     clearLogBtn.addEventListener('click', clearDebugLog);
     
-    // 顯示錯誤訊息
+    // Show error message
     function showError(message) {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
@@ -44,60 +44,60 @@ document.addEventListener('DOMContentLoaded', function() {
         errorDiv.style.borderRadius = '4px';
         errorDiv.style.border = '1px solid #ffcccc';
         
-        // 添加到狀態面板
+        // Add to status panel
         const statusPanel = document.querySelector('.status-panel');
         statusPanel.appendChild(errorDiv);
         
-        // 5秒後自動移除
+        // Automatically remove after 5 seconds
         setTimeout(() => {
             errorDiv.remove();
         }, 5000);
         
-        // 同時記錄到除錯日誌
-        logDebug(`錯誤: ${message}`);
+        // Also log to debug log
+        logDebug(`Error: ${message}`);
     }
     
-    // 獲取序列埠列表
+    // Fetch serial port list
     function fetchPorts() {
         fetch('/api/ports')
             .then(response => response.json())
             .then(data => {
-                portSelect.innerHTML = '<option value="">-- 請選擇序列埠 --</option>';
+                portSelect.innerHTML = '<option value="">-- Please select a serial port --</option>';
                 data.forEach(port => {
                     const option = document.createElement('option');
                     option.value = port.device;
                     option.textContent = `${port.device} (${port.description})`;
                     portSelect.appendChild(option);
                 });
-                logDebug('已更新序列埠列表');
+                logDebug('Serial port list updated');
             })
             .catch(error => {
-                console.error('獲取序列埠列表時出錯:', error);
-                showError(`獲取序列埠列表時出錯: ${error.message}`);
+                console.error('Error fetching serial port list:', error);
+                showError(`Error fetching serial port list: ${error.message}`);
             });
     }
     
-    // 獲取顯示器列表
+    // Fetch display list
     function fetchDisplays() {
         fetch('/api/displays')
             .then(response => response.json())
             .then(data => {
-                displaySelect.innerHTML = '<option value="">-- 請選擇顯示器 --</option>';
+                displaySelect.innerHTML = '<option value="">-- Please select a display --</option>';
                 data.forEach(display => {
                     const option = document.createElement('option');
                     option.value = display.id;
                     option.textContent = display.desc;
                     displaySelect.appendChild(option);
                 });
-                logDebug('已更新顯示器列表');
+                logDebug('Display list updated');
             })
             .catch(error => {
-                console.error('獲取顯示器列表時出錯:', error);
-                showError(`獲取顯示器列表時出錯: ${error.message}`);
+                console.error('Error fetching display list:', error);
+                showError(`Error fetching display list: ${error.message}`);
             });
     }
     
-    // 切換監聽狀態
+    // Toggle monitoring status
     function toggleMonitoring() {
         if (isMonitoring) {
             stopMonitoring();
@@ -106,18 +106,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 開始監聽
+    // Start monitoring
     function startMonitoring() {
         const port = portSelect.value;
         const displayId = displaySelect.value;
         
         if (!port) {
-            showError('請選擇一個序列埠');
+            showError('Please select a serial port');
             return;
         }
         
         if (!displayId) {
-            showError('請選擇一個要控制的顯示器');
+            showError('Please select a display to control');
             return;
         }
         
@@ -135,23 +135,23 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 isMonitoring = true;
-                toggleMonitoringBtn.innerHTML = '<i class="fas fa-stop"></i> 停止監聽';
+                toggleMonitoringBtn.innerHTML = '<i class="fas fa-stop"></i> Stop Monitoring';
                 toggleMonitoringBtn.classList.remove('btn-primary');
                 toggleMonitoringBtn.classList.add('btn-danger');
                 portSelect.disabled = true;
                 displaySelect.disabled = true;
-                logDebug(`開始監聽序列埠: ${port}`);
+                logDebug(`Started monitoring serial port: ${port}`);
             } else {
                 showError(data.message);
             }
         })
         .catch(error => {
-            console.error('啟動監聽時出錯:', error);
-            showError(`啟動監聽時出錯: ${error.message}`);
+            console.error('Error starting monitoring:', error);
+            showError(`Error starting monitoring: ${error.message}`);
         });
     }
     
-    // 停止監聽
+    // Stop monitoring
     function stopMonitoring() {
         fetch('/api/stop', {
             method: 'POST',
@@ -163,35 +163,35 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 isMonitoring = false;
-                toggleMonitoringBtn.innerHTML = '<i class="fas fa-play"></i> 開始監聽';
+                toggleMonitoringBtn.innerHTML = '<i class="fas fa-play"></i> Start Monitoring';
                 toggleMonitoringBtn.classList.remove('btn-danger');
                 toggleMonitoringBtn.classList.add('btn-primary');
                 portSelect.disabled = false;
                 displaySelect.disabled = false;
-                logDebug('停止監聽');
+                logDebug('Stopped monitoring');
             } else {
                 showError(data.message);
             }
         })
         .catch(error => {
-            console.error('停止監聽時出錯:', error);
-            showError(`停止監聽時出錯: ${error.message}`);
+            console.error('Error stopping monitoring:', error);
+            showError(`Error stopping monitoring: ${error.message}`);
         });
     }
     
-    // 切換除錯模式
+    // Toggle debug mode
     function toggleDebugMode() {
         debugMode = debugToggle.checked;
-        logDebug(`除錯模式已${debugMode ? '啟用' : '停用'}`);
+        logDebug(`Debug mode ${debugMode ? 'enabled' : 'disabled'}`);
     }
     
-    // 清除除錯日誌
+    // Clear debug log
     function clearDebugLog() {
         debugLog.innerHTML = '';
-        logDebug('日誌已清除');
+        logDebug('Log cleared');
     }
     
-    // 記錄除錯訊息
+    // Log debug message
     function logDebug(message) {
         if (debugMode) {
             const timestamp = new Date().toLocaleTimeString();
@@ -203,42 +203,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Socket.IO 事件處理
+    // Socket.IO event handlers
     socket.on('connect', () => {
-        logDebug('已連接到伺服器');
+        logDebug('Connected to server');
     });
     
     socket.on('disconnect', () => {
-        logDebug('與伺服器斷開連接');
+        logDebug('Disconnected from server');
     });
     
     socket.on('connection', (data) => {
         connectionStatus.textContent = data.status;
         connectionStatus.style.color = data.color;
-        logDebug(`連線狀態: ${data.status}`);
+        logDebug(`Connection status: ${data.status}`);
     });
     
     socket.on('received', (data) => {
         receivedData.textContent = data.data;
-        logDebug(`收到角度: ${data.data}`);
+        logDebug(`Received angle: ${data.data}`);
     });
     
     socket.on('action', (data) => {
         actionStatus.textContent = data.status;
-        logDebug(`操作: ${data.status}`);
+        logDebug(`Action: ${data.status}`);
     });
     
     socket.on('error', (data) => {
         showError(data.message);
     });
     
-    // 除錯顯示器
+    // Debug displays
     function debugDisplays() {
         fetch('/api/debug/displays')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // 創建一個模態框來顯示詳細信息
+                    // Create a modal to display detailed information
                     const modal = document.createElement('div');
                     modal.className = 'modal';
                     modal.style.position = 'fixed';
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     modalContent.style.overflow = 'auto';
                     
                     const closeBtn = document.createElement('button');
-                    closeBtn.textContent = '關閉';
+                    closeBtn.textContent = 'Close';
                     closeBtn.style.marginBottom = '10px';
                     closeBtn.style.padding = '5px 10px';
                     closeBtn.onclick = () => modal.remove();
@@ -270,26 +270,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     const pre = document.createElement('pre');
                     pre.style.whiteSpace = 'pre-wrap';
                     pre.style.fontFamily = 'monospace';
-                    pre.textContent = `displayplacer 輸出:\n\n${data.stdout}\n\n錯誤輸出:\n${data.stderr}\n\n返回碼: ${data.returncode}`;
+                    pre.textContent = `displayplacer output:\n\n${data.stdout}\n\nError output:\n${data.stderr}\n\nReturn code: ${data.returncode}`;
                     
                     modalContent.appendChild(closeBtn);
                     modalContent.appendChild(pre);
                     modal.appendChild(modalContent);
                     document.body.appendChild(modal);
                     
-                    // 點擊背景關閉模態框
+                    // Click background to close modal
                     modal.onclick = (e) => {
                         if (e.target === modal) {
                             modal.remove();
                         }
                     };
                 } else {
-                    showError(`除錯失敗: ${data.error}`);
+                    showError(`Debug failed: ${data.error}`);
                 }
             })
             .catch(error => {
-                console.error('除錯顯示器時出錯:', error);
-                showError(`除錯顯示器時出錯: ${error.message}`);
+                console.error('Error in debug displays:', error);
+                showError(`Error in debug displays: ${error.message}`);
             });
     }
 }); 
