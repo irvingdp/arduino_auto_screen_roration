@@ -6,9 +6,6 @@
 
 Adafruit_MPU6050 mpu;
 
-int currentOrientation = 0; // 追蹤當前邏輯上的方向
-int lastSentOrientation = -1; // 追蹤上次發送的方向
-
 // 角度邊界 (以度為單位)
 // 這些邊界定義了每個方向的 "中心區域" 為 90 度寬
 // 例如, 0 度方向的範圍是 45 度到 135 度 (圍繞 Y+ 軸)
@@ -95,14 +92,8 @@ void loop() {
   Serial.print("\tDetected: "); Serial.println(orientationToString(detectedOrientation));
   // ---- End Debugging ---- */
 
-
-  // 只有當檢測到的方向有效 (-1 表示無效) 且與上次發送的方向不同時，才發送更新
-  if (detectedOrientation != -1 && detectedOrientation != lastSentOrientation) {
-    Serial.println(orientationToString(detectedOrientation)); // 發送 "0", "90", "180", 或 "270"
-    lastSentOrientation = detectedOrientation; // 更新上次發送的方向
-  }
-
-  delay(150); // 稍微增加延遲，讓角度穩定，可以根據需要調整 (例如 100-300ms)
+  Serial.println(orientationToString(detectedOrientation)); // 發送 "0", "90", "180", 或 "270"
+  delay(300); // 稍微增加延遲，讓角度穩定，可以根據需要調整 (例如 100-300ms)
 }
 
 // 將方向代碼轉換為字串
