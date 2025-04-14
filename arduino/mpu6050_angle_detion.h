@@ -1,4 +1,3 @@
-目前偵測程式如下 ，請減少在邊界附近快速切換的狀態，至少要相隔2秒
 
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
@@ -6,9 +5,6 @@
 #include <math.h> // 需要包含 math.h 來使用 atan2 和 M_PI
 
 Adafruit_MPU6050 mpu;
-
-int currentOrientation = 0; // 追蹤當前邏輯上的方向
-int lastSentOrientation = -1; // 追蹤上次發送的方向
 
 // 角度邊界 (以度為單位)
 // 這些邊界定義了每個方向的 "中心區域" 為 90 度寬
@@ -96,23 +92,17 @@ void loop() {
   Serial.print("\tDetected: "); Serial.println(orientationToString(detectedOrientation));
   // ---- End Debugging ---- */
 
-
-  // 只有當檢測到的方向有效 (-1 表示無效) 且與上次發送的方向不同時，才發送更新
-  if (detectedOrientation != -1 && detectedOrientation != lastSentOrientation) {
-    Serial.println(orientationToString(detectedOrientation)); // 發送 "0", "90", "180", 或 "270"
-    lastSentOrientation = detectedOrientation; // 更新上次發送的方向
-  }
-
-  delay(150); // 稍微增加延遲，讓角度穩定，可以根據需要調整 (例如 100-300ms)
+  Serial.println(orientationToString(detectedOrientation)); // 發送 "0", "90", "180", 或 "270"
+  delay(300); // 稍微增加延遲，讓角度穩定，可以根據需要調整 (例如 100-300ms)
 }
 
 // 將方向代碼轉換為字串
 String orientationToString(int orientation) {
   switch (orientation) {
     case 0: return "0";
-    case 1: return "90";
+    case 1: return "270";
     case 2: return "180";
-    case 3: return "270";
+    case 3: return "90";
     default: return "UNDEF"; // Undefined or -1
   }
 }
