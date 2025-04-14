@@ -1,4 +1,3 @@
-目前偵測程式如下 ，請減少在邊界附近快速切換的狀態，至少要相隔2秒
 
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
@@ -110,9 +109,9 @@ void loop() {
 String orientationToString(int orientation) {
   switch (orientation) {
     case 0: return "0";
-    case 1: return "90";
+    case 1: return "270";
     case 2: return "180";
-    case 3: return "270";
+    case 3: return "90";
     default: return "UNDEF"; // Undefined or -1
   }
 }

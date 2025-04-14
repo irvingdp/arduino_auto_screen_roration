@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
         errorDiv.textContent = message;
-        errorDiv.style.color = 'red';
+        errorDiv.style.color = 'black';
         errorDiv.style.padding = '10px';
         errorDiv.style.margin = '10px 0';
         errorDiv.style.backgroundColor = '#ffeeee';
