@@ -1,0 +1,393 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		179AE79FE37BF4FBA45E5F3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24A45938FD58D9910BEB10CE /* Assets.xcassets */; };
+		20CCC821F108CAC69D09B4DA /* DisplayInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8080A95B072413E4C48BD9DA /* DisplayInfo.swift */; };
+		304BB711ED586157ACE80071 /* StatusPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E158B4A9D9DAFACE0D3BBC6F /* StatusPanelView.swift */; };
+		49D0DE34DF93D009ADD43046 /* SerialPortInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEA05078CABE23255FE4E5B /* SerialPortInfo.swift */; };
+		645E45B2E83A39157D7F7BA0 /* SerialPortService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBB31078CBAA9CAEE5EF4E3 /* SerialPortService.swift */; };
+		78DC5C5D1C5AD180A950D2A2 /* ScreenRotatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF832D389D6B5F06A5B6E140 /* ScreenRotatorApp.swift */; };
+		87281904FEACCB3A47463279 /* ControlPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863FA952AF1528F8F22351C6 /* ControlPanelView.swift */; };
+		A696B3255317B0662B486A98 /* DisplayPlacerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1413E4DAE9032C0E8CFE0F5E /* DisplayPlacerService.swift */; };
+		A69D82BDA8022B7C639E3E74 /* DebugPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67E6E3AA7E8A7A261F973B9 /* DebugPanelView.swift */; };
+		B4A035F1ECA00D28C520284F /* DisplayPlacerParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C42055AE712930D572B79 /* DisplayPlacerParser.swift */; };
+		CB42C912ACAFDC9E504144F5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7721430C268387DE7B99FBA8 /* AppState.swift */; };
+		CF748656044286DC55EFC5D7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4687D1CB14F91A5CB05F6C66 /* ContentView.swift */; };
+		FD528C46C4986D67EE3A8CB5 /* DebugDisplaysSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AE72F441E9D618C1B61F38 /* DebugDisplaysSheet.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04D2DC066A8F63D760E2601E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1413E4DAE9032C0E8CFE0F5E /* DisplayPlacerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPlacerService.swift; sourceTree = "<group>"; };
+		24A45938FD58D9910BEB10CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		319208CC520C9899EFACA968 /* ScreenRotator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenRotator.entitlements; sourceTree = "<group>"; };
+		3BEA05078CABE23255FE4E5B /* SerialPortInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialPortInfo.swift; sourceTree = "<group>"; };
+		4687D1CB14F91A5CB05F6C66 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7721430C268387DE7B99FBA8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		8080A95B072413E4C48BD9DA /* DisplayInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayInfo.swift; sourceTree = "<group>"; };
+		863FA952AF1528F8F22351C6 /* ControlPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPanelView.swift; sourceTree = "<group>"; };
+		A1AE72F441E9D618C1B61F38 /* DebugDisplaysSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDisplaysSheet.swift; sourceTree = "<group>"; };
+		AF832D389D6B5F06A5B6E140 /* ScreenRotatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenRotatorApp.swift; sourceTree = "<group>"; };
+		B67E6E3AA7E8A7A261F973B9 /* DebugPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPanelView.swift; sourceTree = "<group>"; };
+		C43A208A298824B31656D737 /* ScreenRotator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenRotator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEBB31078CBAA9CAEE5EF4E3 /* SerialPortService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialPortService.swift; sourceTree = "<group>"; };
+		E158B4A9D9DAFACE0D3BBC6F /* StatusPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPanelView.swift; sourceTree = "<group>"; };
+		F94C42055AE712930D572B79 /* DisplayPlacerParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayPlacerParser.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1153F3D5B91E9344F4A943AC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C43A208A298824B31656D737 /* ScreenRotator.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		326CCA217AD491E7DC8BA23A /* ScreenRotator */ = {
+			isa = PBXGroup;
+			children = (
+				FE285FFB4E9325227742B706 /* App */,
+				6A12190DAE16E4DF12232495 /* Models */,
+				8A5726BCC6C6DE1498C0470C /* Resources */,
+				F1550736998CAE2285676BFF /* Services */,
+				D4C902CC1ECE95850591DF76 /* Views */,
+			);
+			path = ScreenRotator;
+			sourceTree = "<group>";
+		};
+		6A12190DAE16E4DF12232495 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7721430C268387DE7B99FBA8 /* AppState.swift */,
+				8080A95B072413E4C48BD9DA /* DisplayInfo.swift */,
+				3BEA05078CABE23255FE4E5B /* SerialPortInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8A5726BCC6C6DE1498C0470C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				24A45938FD58D9910BEB10CE /* Assets.xcassets */,
+				04D2DC066A8F63D760E2601E /* Info.plist */,
+				319208CC520C9899EFACA968 /* ScreenRotator.entitlements */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C8F1D8FD21561EA31EBAF72C = {
+			isa = PBXGroup;
+			children = (
+				326CCA217AD491E7DC8BA23A /* ScreenRotator */,
+				1153F3D5B91E9344F4A943AC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D4C902CC1ECE95850591DF76 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				863FA952AF1528F8F22351C6 /* ControlPanelView.swift */,
+				A1AE72F441E9D618C1B61F38 /* DebugDisplaysSheet.swift */,
+				B67E6E3AA7E8A7A261F973B9 /* DebugPanelView.swift */,
+				E158B4A9D9DAFACE0D3BBC6F /* StatusPanelView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F1550736998CAE2285676BFF /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F94C42055AE712930D572B79 /* DisplayPlacerParser.swift */,
+				1413E4DAE9032C0E8CFE0F5E /* DisplayPlacerService.swift */,
+				DEBB31078CBAA9CAEE5EF4E3 /* SerialPortService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FE285FFB4E9325227742B706 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4687D1CB14F91A5CB05F6C66 /* ContentView.swift */,
+				AF832D389D6B5F06A5B6E140 /* ScreenRotatorApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60521D3B08D9AEC43A72AFB /* ScreenRotator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0ABEB9676205716B952CAD23 /* Build configuration list for PBXNativeTarget "ScreenRotator" */;
+			buildPhases = (
+				45DC012CD17DB7D0977CEE83 /* Sources */,
+				239198BC9F82867BD181788E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenRotator;
+			packageProductDependencies = (
+			);
+			productName = ScreenRotator;
+			productReference = C43A208A298824B31656D737 /* ScreenRotator.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6D3D98AC07D8B2582A1C7A6B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 319617B041CA8060097CD35D /* Build configuration list for PBXProject "ScreenRotator" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C8F1D8FD21561EA31EBAF72C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1153F3D5B91E9344F4A943AC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60521D3B08D9AEC43A72AFB /* ScreenRotator */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		239198BC9F82867BD181788E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				179AE79FE37BF4FBA45E5F3F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		45DC012CD17DB7D0977CEE83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB42C912ACAFDC9E504144F5 /* AppState.swift in Sources */,
+				CF748656044286DC55EFC5D7 /* ContentView.swift in Sources */,
+				87281904FEACCB3A47463279 /* ControlPanelView.swift in Sources */,
+				FD528C46C4986D67EE3A8CB5 /* DebugDisplaysSheet.swift in Sources */,
+				A69D82BDA8022B7C639E3E74 /* DebugPanelView.swift in Sources */,
+				20CCC821F108CAC69D09B4DA /* DisplayInfo.swift in Sources */,
+				B4A035F1ECA00D28C520284F /* DisplayPlacerParser.swift in Sources */,
+				A696B3255317B0662B486A98 /* DisplayPlacerService.swift in Sources */,
+				78DC5C5D1C5AD180A950D2A2 /* ScreenRotatorApp.swift in Sources */,
+				49D0DE34DF93D009ADD43046 /* SerialPortInfo.swift in Sources */,
+				645E45B2E83A39157D7F7BA0 /* SerialPortService.swift in Sources */,
+				304BB711ED586157ACE80071 /* StatusPanelView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0035C70C8B122EF002542215 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		84F291F04F04B6BB326728E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		C4CF209659C085E5C27C3842 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = ScreenRotator/Resources/ScreenRotator.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScreenRotator/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ivan.ScreenRotator;
+				PRODUCT_NAME = ScreenRotator;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FE26707AEC320B13B4E0507C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = ScreenRotator/Resources/ScreenRotator.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScreenRotator/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ivan.ScreenRotator;
+				PRODUCT_NAME = ScreenRotator;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0ABEB9676205716B952CAD23 /* Build configuration list for PBXNativeTarget "ScreenRotator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4CF209659C085E5C27C3842 /* Debug */,
+				FE26707AEC320B13B4E0507C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		319617B041CA8060097CD35D /* Build configuration list for PBXProject "ScreenRotator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84F291F04F04B6BB326728E2 /* Debug */,
+				0035C70C8B122EF002542215 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6D3D98AC07D8B2582A1C7A6B /* Project object */;
+}

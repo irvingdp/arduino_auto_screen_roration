@@ -1,0 +1,27 @@
+name: ScreenRotator
+options:
+  bundleIdPrefix: com.ivan
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  minimumXcodeGenVersion: "2.30"
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+targets:
+  ScreenRotator:
+    type: application
+    platform: macOS
+    sources:
+      - ScreenRotator
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ivan.ScreenRotator
+        PRODUCT_NAME: ScreenRotator
+        CODE_SIGN_ENTITLEMENTS: ScreenRotator/Resources/ScreenRotator.entitlements
+        INFOPLIST_FILE: ScreenRotator/Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: false
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: false
+        ENABLE_APP_SANDBOX: false

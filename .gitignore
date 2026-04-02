@@ -1,0 +1,18 @@
+# Xcode build artifacts
+ScreenRotator/build/
+DerivedData/
+
+# Xcode user-specific files
+ScreenRotator/ScreenRotator.xcodeproj/project.xcworkspace/xcuserdata/
+ScreenRotator/ScreenRotator.xcodeproj/project.xcworkspace/xcshareddata/
+ScreenRotator/ScreenRotator.xcodeproj/xcuserdata/
+
+# macOS
+.DS_Store
+
+# Claude Code
+.claude/
+
+# Python
+__pycache__/
+*.pyc
