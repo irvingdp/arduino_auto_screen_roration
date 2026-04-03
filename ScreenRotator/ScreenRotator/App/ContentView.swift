@@ -14,8 +14,13 @@ struct ContentView: View {
         }
         .frame(minWidth: 500, minHeight: 500)
         .onAppear {
+            NSApplication.shared.setActivationPolicy(.regular)
             appState.refreshPorts()
             Task { await appState.refreshDisplays() }
+        }
+        .onDisappear {
+            // Hide dock icon when window is closed (menu bar only)
+            NSApplication.shared.setActivationPolicy(.accessory)
         }
         .sheet(isPresented: $appState.showingDebugDisplays) {
             DebugDisplaysSheet()

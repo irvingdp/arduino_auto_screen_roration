@@ -17,6 +17,7 @@
 		A696B3255317B0662B486A98 /* DisplayPlacerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1413E4DAE9032C0E8CFE0F5E /* DisplayPlacerService.swift */; };
 		A69D82BDA8022B7C639E3E74 /* DebugPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67E6E3AA7E8A7A261F973B9 /* DebugPanelView.swift */; };
 		B4A035F1ECA00D28C520284F /* DisplayPlacerParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C42055AE712930D572B79 /* DisplayPlacerParser.swift */; };
+		C0AB310B57715A4BB12CBFA5 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422D679564E65267BB2CC186 /* MenuBarView.swift */; };
 		CB42C912ACAFDC9E504144F5 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7721430C268387DE7B99FBA8 /* AppState.swift */; };
 		CF748656044286DC55EFC5D7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4687D1CB14F91A5CB05F6C66 /* ContentView.swift */; };
 		FD528C46C4986D67EE3A8CB5 /* DebugDisplaysSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1AE72F441E9D618C1B61F38 /* DebugDisplaysSheet.swift */; };
@@ -28,6 +29,7 @@
 		24A45938FD58D9910BEB10CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		319208CC520C9899EFACA968 /* ScreenRotator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenRotator.entitlements; sourceTree = "<group>"; };
 		3BEA05078CABE23255FE4E5B /* SerialPortInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialPortInfo.swift; sourceTree = "<group>"; };
+		422D679564E65267BB2CC186 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		4687D1CB14F91A5CB05F6C66 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7721430C268387DE7B99FBA8 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		8080A95B072413E4C48BD9DA /* DisplayInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayInfo.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 				863FA952AF1528F8F22351C6 /* ControlPanelView.swift */,
 				A1AE72F441E9D618C1B61F38 /* DebugDisplaysSheet.swift */,
 				B67E6E3AA7E8A7A261F973B9 /* DebugPanelView.swift */,
+				422D679564E65267BB2CC186 /* MenuBarView.swift */,
 				E158B4A9D9DAFACE0D3BBC6F /* StatusPanelView.swift */,
 			);
 			path = Views;
@@ -195,6 +198,7 @@
 				20CCC821F108CAC69D09B4DA /* DisplayInfo.swift in Sources */,
 				B4A035F1ECA00D28C520284F /* DisplayPlacerParser.swift in Sources */,
 				A696B3255317B0662B486A98 /* DisplayPlacerService.swift in Sources */,
+				C0AB310B57715A4BB12CBFA5 /* MenuBarView.swift in Sources */,
 				78DC5C5D1C5AD180A950D2A2 /* ScreenRotatorApp.swift in Sources */,
 				49D0DE34DF93D009ADD43046 /* SerialPortInfo.swift in Sources */,
 				645E45B2E83A39157D7F7BA0 /* SerialPortService.swift in Sources */,
