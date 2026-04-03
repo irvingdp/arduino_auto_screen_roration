@@ -1,7 +1,9 @@
 import SwiftUI
+import AppKit
 
 struct DebugPanelView: View {
     @EnvironmentObject var appState: AppState
+    @State private var copied = false
 
     var body: some View {
         GroupBox {
@@ -13,6 +15,19 @@ struct DebugPanelView: View {
                     Toggle("Debug Mode", isOn: $appState.debugEnabled)
                         .toggleStyle(.switch)
                         .controlSize(.small)
+                    Button {
+                        let text = appState.debugLog
+                            .map { "[\($0.formattedTime)] \($0.message)" }
+                            .joined(separator: "\n")
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(text, forType: .string)
+                        copied = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = false }
+                    } label: {
+                        Image(systemName: copied ? "checkmark" : "doc.on.doc")
+                        Text(copied ? "Copied!" : "Copy")
+                    }
+                    .controlSize(.small)
                     Button {
                         appState.clearDebugLog()
                     } label: {

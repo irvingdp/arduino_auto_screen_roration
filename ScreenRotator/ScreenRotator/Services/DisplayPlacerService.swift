@@ -1,4 +1,7 @@
 import Foundation
+import os.log
+
+private let logger = Logger(subsystem: "com.ivan.ScreenRotator", category: "DisplayPlacer")
 
 enum DisplayPlacerError: LocalizedError {
     case notFound
@@ -25,10 +28,13 @@ class DisplayPlacerService {
             "/usr/local/bin/displayplacer"
         ]
         for path in candidates {
-            if FileManager.default.isExecutableFile(atPath: path) {
+            let exists = FileManager.default.isExecutableFile(atPath: path)
+            logger.info("findDisplayPlacer: \(path) exists=\(exists)")
+            if exists {
                 return path
             }
         }
+        logger.error("findDisplayPlacer: NOT FOUND in any candidate path")
         return nil
     }
 
@@ -40,9 +46,15 @@ class DisplayPlacerService {
     }
 
     func listDisplays(originCache: [String: String]) async throws -> ([DisplayInfo], String, [String: String]) {
+        logger.info("listDisplays: fetching...")
         let output = try await rawListOutput()
+        logger.info("listDisplays: raw output length=\(output.count)")
         var cache = originCache
         let displays = DisplayPlacerParser.parseDisplays(from: output, originCache: &cache)
+        logger.info("listDisplays: parsed \(displays.count) display(s)")
+        for d in displays {
+            logger.info("  display: id=\(d.id) type=\(d.type) res=\(d.res) degree=\(d.degree) origin=\(d.origin)")
+        }
         return (displays, output, cache)
     }
 
@@ -65,7 +77,10 @@ class DisplayPlacerService {
             args.append(param)
         }
 
+        logger.info("rotateDisplay: target=\(targetID) degree=\(degree)")
+        logger.info("rotateDisplay: args=\(args)")
         _ = try await runProcess(binary, arguments: args)
+        logger.info("rotateDisplay: success")
     }
 
     private func runProcess(_ path: String, arguments: [String]) async throws -> String {
