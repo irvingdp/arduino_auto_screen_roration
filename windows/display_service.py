@@ -24,33 +24,56 @@ DMDO_270 = 3      # 270°
 ANGLE_TO_DMDO = {"0": DMDO_DEFAULT, "90": DMDO_90, "180": DMDO_180, "270": DMDO_270}
 DMDO_TO_ANGLE = {v: k for k, v in ANGLE_TO_DMDO.items()}
 
+# Win32 DEVMODEW: after dmFields, printer shorts and (position + display orientation)
+# share the same 16 bytes via a union. A flat ctypes layout reads wrong offsets (e.g. 0x0 resolution).
+CCHDEVICENAME = 32
+CCHFORMNAME = 32
+
+
+class _DEVMODE_PRINT(ctypes.Structure):
+    _fields_ = [
+        ("dmOrientation", wintypes.SHORT),
+        ("dmPaperSize", wintypes.SHORT),
+        ("dmPaperLength", wintypes.SHORT),
+        ("dmPaperWidth", wintypes.SHORT),
+        ("dmScale", wintypes.SHORT),
+        ("dmCopies", wintypes.SHORT),
+        ("dmDefaultSource", wintypes.SHORT),
+        ("dmPrintQuality", wintypes.SHORT),
+    ]
+
+
+class _DEVMODE_DISPLAY(ctypes.Structure):
+    _fields_ = [
+        ("dmPositionX", wintypes.LONG),
+        ("dmPositionY", wintypes.LONG),
+        ("dmDisplayOrientation", wintypes.DWORD),
+        ("dmDisplayFixedOutput", wintypes.DWORD),
+    ]
+
+
+class _DEVMODE_UNION(ctypes.Union):
+    _fields_ = [
+        ("_print", _DEVMODE_PRINT),
+        ("_display", _DEVMODE_DISPLAY),
+    ]
+
 
 class DEVMODE(ctypes.Structure):
     _fields_ = [
-        ("dmDeviceName", ctypes.c_wchar * 32),
+        ("dmDeviceName", ctypes.c_wchar * CCHDEVICENAME),
         ("dmSpecVersion", wintypes.WORD),
         ("dmDriverVersion", wintypes.WORD),
         ("dmSize", wintypes.WORD),
         ("dmDriverExtra", wintypes.WORD),
         ("dmFields", wintypes.DWORD),
-        ("dmOrientation", ctypes.c_short),
-        ("dmPaperSize", ctypes.c_short),
-        ("dmPaperLength", ctypes.c_short),
-        ("dmPaperWidth", ctypes.c_short),
-        ("dmScale", ctypes.c_short),
-        ("dmCopies", ctypes.c_short),
-        ("dmDefaultSource", ctypes.c_short),
-        ("dmPrintQuality", ctypes.c_short),
-        ("dmPositionX", ctypes.c_long),
-        ("dmPositionY", ctypes.c_long),
-        ("dmDisplayOrientation", wintypes.DWORD),
-        ("dmDisplayFixedOutput", wintypes.DWORD),
-        ("dmColor", ctypes.c_short),
-        ("dmDuplex", ctypes.c_short),
-        ("dmYResolution", ctypes.c_short),
-        ("dmTTOption", ctypes.c_short),
-        ("dmCollate", ctypes.c_short),
-        ("dmFormName", ctypes.c_wchar * 32),
+        ("_union", _DEVMODE_UNION),
+        ("dmColor", wintypes.SHORT),
+        ("dmDuplex", wintypes.SHORT),
+        ("dmYResolution", wintypes.SHORT),
+        ("dmTTOption", wintypes.SHORT),
+        ("dmCollate", wintypes.SHORT),
+        ("dmFormName", ctypes.c_wchar * CCHFORMNAME),
         ("dmLogPixels", wintypes.WORD),
         ("dmBitsPerPel", wintypes.DWORD),
         ("dmPelsWidth", wintypes.DWORD),
@@ -108,7 +131,8 @@ class DisplayService:
             if not user32.EnumDisplaySettingsW(dd.DeviceName, ENUM_CURRENT_SETTINGS, ctypes.byref(devmode)):
                 continue
 
-            orientation = devmode.dmDisplayOrientation
+            disp = devmode._union._display
+            orientation = disp.dmDisplayOrientation
             width = devmode.dmPelsWidth
             height = devmode.dmPelsHeight
 
@@ -146,7 +170,8 @@ class DisplayService:
             logger.error(f"Failed to get display settings for {device_name}")
             return False
 
-        current_orientation = devmode.dmDisplayOrientation
+        disp = devmode._union._display
+        current_orientation = disp.dmDisplayOrientation
         logger.info(f"Rotating {device_name}: {DMDO_TO_ANGLE.get(current_orientation)}° → {angle}°")
 
         # Swap width/height when switching between landscape and portrait
@@ -156,7 +181,7 @@ class DisplayService:
             devmode.dmPelsWidth, devmode.dmPelsHeight = devmode.dmPelsHeight, devmode.dmPelsWidth
             logger.info(f"Swapped resolution to {devmode.dmPelsWidth}x{devmode.dmPelsHeight}")
 
-        devmode.dmDisplayOrientation = new_orientation
+        disp.dmDisplayOrientation = new_orientation
         devmode.dmFields = DM_DISPLAYORIENTATION | DM_PELSWIDTH | DM_PELSHEIGHT
 
         result = user32.ChangeDisplaySettingsExW(

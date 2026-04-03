@@ -1,6 +1,8 @@
 # Screen Auto-Rotation Controller
 
-This is a Flask-based web application for automatic screen rotation control. It communicates with an Arduino device through a serial port, which has an MPU6050 sensor installed to receive angle data, and uses the `displayplacer` command to rotate the specified display.
+Arduino + MPU6050 reads physical orientation and sends angles (`0`, `90`, `180`, `270`) over serial at 9600 baud. A desktop app listens on the serial port and rotates the selected display automatically.
+
+**Recommended:** use the native apps — **ScreenRotator** on **macOS** or the **Windows** build in `windows/` (PyInstaller `ScreenRotator.exe`). A legacy **Flask web UI** in the repo root is still available for reference.
 
 ## Function Demo
 
@@ -12,126 +14,107 @@ This is a Flask-based web application for automatic screen rotation control. It 
 
 ## Features
 
-- Web interface, easy to use
-- Automatically detects available serial ports and displays
-- Real-time display of connection status and received data
-- Debug mode for easy troubleshooting
-- Responsive design, adaptable to different devices
+- **macOS:** native SwiftUI app (`ScreenRotator/`) using `displayplacer`
+- **Windows:** native-style tray app (`windows/`) using Win32 `ChangeDisplaySettingsEx` (correct `DEVMODEW` layout for reliable rotation)
+- **Legacy:** web interface (`web_screen_rotator.py`) — Flask + browser, macOS + `displayplacer` only
+- Serial port enumeration and display selection
+- Connection status, received angle, optional debug log
 
 ## System Requirements
 
-- Python 3.6+
-- Flask and related dependencies
-- `displayplacer` command-line tool (for controlling displays)
-- Supported operating system: macOS (requires `displayplacer`)
+| Platform | App | Requirements |
+|----------|-----|----------------|
+| **macOS** | ScreenRotator | Xcode / built app, [displayplacer](https://github.com/jakehilborn/displayplacer) (`brew install displayplacer`) |
+| **Windows** | `windows/dist/ScreenRotator.exe` (or run from source) | Python 3.12+ if building from source; no `displayplacer` |
+| **macOS** (legacy web) | Flask UI | Python 3.6+, Flask, `displayplacer` |
 
-## Installation
+## Installation & build
 
-1. Clone or download this project to your local machine
-
-2. Install the required Python dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Install `displayplacer` (if not already installed):
+### macOS — ScreenRotator (recommended)
 
 ```bash
 brew install displayplacer
+open ScreenRotator/ScreenRotator.xcodeproj
 ```
 
-## Usage
-
-### Starting the Application
-
-1. Navigate to the project directory in the terminal
-
-2. Run the Flask application:
+Or from the command line:
 
 ```bash
+cd ScreenRotator
+xcodebuild -scheme ScreenRotator -configuration Debug build CODE_SIGN_IDENTITY="-"
+```
+
+Optional DMG: see `ScreenRotator/scripts/create-dmg.sh` and project docs in `CLAUDE.md`.
+
+### Windows — executable
+
+Prebuilt: use `windows/dist/ScreenRotator.exe` from a release artifact, or build locally:
+
+```powershell
+cd windows
+py -3.12 -m pip install -r requirements.txt pyinstaller
+py -3.12 -m PyInstaller --clean build.spec
+```
+
+Output: `windows/dist/ScreenRotator.exe`. Use **Python 3.12** for builds (matches CI; Pillow wheels and PyInstaller hooks are reliable).
+
+### Legacy web UI (macOS + displayplacer)
+
+```bash
+pip install -r requirements.txt
+brew install displayplacer
 python web_screen_rotator.py
 ```
 
-3. Open a browser and visit:
+Open `http://localhost:8098`.
 
-```
-http://localhost:8098
-```
+## Usage (native apps)
 
-### Using the Interface
+1. Connect the Arduino (MPU6050 firmware, 9600 baud).
+2. Start **ScreenRotator** (macOS) or **ScreenRotator.exe** (Windows).
+3. Choose the serial port and the display to control.
+4. Start monitoring; when the device sends `0` / `90` / `180` / `270`, the selected display rotates accordingly.
 
-1. Select the Arduino serial port from the dropdown menu
-2. Select the display to control from the dropdown menu
-3. Click the "Start Monitoring" button to begin monitoring the serial port
-4. When the Arduino sends angle data (0, 90, 180, 270), the application will automatically rotate the selected display
-5. Click the "Stop Monitoring" button to stop monitoring
+## Usage (legacy web)
+
+1. Run `python web_screen_rotator.py` and open `http://localhost:8098`.
+2. Select serial port and display, then **Start Monitoring**.
 
 ## Debugging Guide
 
-### Enabling Debug Mode
+### Enabling debug mode
 
-1. In the web interface, find the "Debug Log" panel
-2. Toggle the "Debug Mode" switch to enable debugging
-3. The debug log will display detailed operation and error information
+- **Native apps:** use the in-app debug log panel if available.
+- **Web:** toggle **Debug Mode** in the Debug Log panel.
 
-### Troubleshooting Common Issues
+### Serial port not found
 
-#### Serial Port Not Found
+- Check USB connection and drivers (Windows: Device Manager COM ports).
+- Use **Refresh** to rescan ports.
 
-- Ensure the Arduino is properly connected to the computer
-- Click the "Refresh" button to update the serial port list
-- Check if the Arduino driver is correctly installed
+### Display not found / cannot rotate
 
-#### Display Not Found
+- **macOS:** ensure `displayplacer` is installed; run `displayplacer list`; check Accessibility permissions if needed.
+- **Windows:** confirm the monitor supports rotation in **Settings → System → Display**; if manual rotation fails, the GPU/driver may block programmatic rotation.
 
-- Ensure `displayplacer` is correctly installed
-- Click the "Refresh" button to update the display list
-- Run `displayplacer list` in the terminal to check if displays can be listed
+### Connection / data issues
 
-#### Unable to Rotate Display
+- Confirm the Arduino sends one of `0`, `90`, `180`, `270` (or `UNDEF` where supported) and baud rate is **9600**.
 
-- Check if `displayplacer` has sufficient permissions (macOS may require granting accessibility permissions)
-- View error messages in the debug log
-- Try running the `displayplacer` command manually in the terminal
+### Legacy: Flask / WebSocket
 
-#### Connection Issues
+See terminal output for Flask errors; use the browser devtools console if live updates fail.
 
-- Check if the Arduino is correctly sending data
-- Confirm the serial port baud rate is set to 9600
-- Check if the serial port connection is stable
-
-### Advanced Debugging
-
-#### Viewing Flask Logs
-
-The Flask application outputs log information to the terminal during runtime, including requests and errors. This information is very useful for troubleshooting.
-
-#### Checking WebSocket Connection
-
-If real-time updates are not working, it might be a WebSocket connection issue. Open the browser's developer tools and check the console for related errors.
-
-#### Testing Serial Communication
-
-You can use serial monitoring tools (such as `screen` or `minicom`) to test communication with the Arduino:
-
-```bash
-screen /dev/tty.usbmodem* 9600
-```
-
-## Project Structure
+## Project structure
 
 ```
-auto_screen_detection/
-├── web_screen_rotator.py  # Main Flask application file
-├── requirements.txt       # Python dependencies
-├── templates/             # HTML templates
-│   └── index.html        # Main page
-└── static/               # Static files
-    ├── css/              # CSS styles
-    │   └── style.css     # Main stylesheet
-    └── js/               # JavaScript files
-        └── app.js        # Frontend logic
+├── ScreenRotator/          # macOS SwiftUI app (Xcode)
+├── windows/                # Windows Python + tkinter + pystray (PyInstaller spec)
+├── arduino/                # Firmware (MPU6050)
+├── web_screen_rotator.py   # Legacy Flask app
+├── templates/, static/     # Legacy web UI
+├── requirements.txt      # Legacy web dependencies
+└── CLAUDE.md               # Maintainer notes (architecture, paths)
 ```
 
 ## License
@@ -140,4 +123,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ## Contributions
 
-Welcome to submit issue reports and improvement suggestions! 
+Issues and pull requests are welcome.
