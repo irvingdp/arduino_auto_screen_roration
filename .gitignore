@@ -16,3 +16,9 @@ ScreenRotator/ScreenRotator.xcodeproj/xcuserdata/
 # Python
 __pycache__/
 *.pyc
+.venv/
+
+# PyInstaller
+windows/build/
+windows/dist/
+*.spec.bak
